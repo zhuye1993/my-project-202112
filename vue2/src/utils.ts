@@ -79,3 +79,80 @@ export function isValidArrayIndex(val: any): boolean {
   const n = parseFloat(String(val))
   return n >= 0 && Math.floor(n) === n && isFinite(val)
 }
+
+export const no = (a?: any, b?: any, c?: any) => false
+
+export function pluckModuleFunction(
+  modules: any,
+  key: string
+): Array<any> {
+  return modules
+    // @ts-ignore
+    ? modules.map((m) => m[key]).filter(_ => _)
+    : []
+}
+
+export function makeMap(
+  str: string,
+  expectsLowerCase?: boolean
+): (key: string) => true | void {
+  const map = Object.create(null)
+  const list: Array<string> = str.split(',')
+  for (let i = 0; i < list.length; i++) {
+    map[list[i]] = true
+  }
+  return expectsLowerCase
+    ? val => map[val.toLowerCase()]
+    : val => map[val]
+}
+
+export const isPlainTextElement = makeMap('script,style,textarea', true)
+
+export const isNonPhrasingTag = makeMap(
+  'address,article,aside,base,blockquote,body,caption,col,colgroup,dd,' +
+  'details,dialog,div,dl,dt,fieldset,figcaption,figure,footer,form,' +
+  'h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,legend,li,menuitem,meta,' +
+  'optgroup,option,param,rp,rt,source,style,summary,tbody,td,tfoot,th,thead,' +
+  'title,tr,track'
+)
+
+export const isBuiltInTag = makeMap('slot,component', true)
+
+function makeAttrsMap(attrs: Array<any>): Object {
+  const map: any = {}
+  for (let i = 0, l = attrs.length; i < l; i++) {
+    map[attrs[i].name] = attrs[i].value
+  }
+  return map
+}
+
+export function createASTElement(
+  tag: string,
+  attrs: Array<any>,
+  parent: any | void
+): any {
+  return {
+    type: 1,
+    tag,
+    attrsList: attrs,
+    attrsMap: makeAttrsMap(attrs),
+    rawAttrsMap: {},
+    parent,
+    children: []
+  }
+}
+
+export function extend(to: any, _from?: any): Object {
+  for (const key in _from) {
+    to[key] = _from[key]
+  }
+  return to
+}
+
+export function cached(fn: any): any {
+  const cache = Object.create(null)
+  return (function cachedFn(str: string) {
+    const hit = cache[str]
+    return hit || (cache[str] = fn(str))
+  })
+}

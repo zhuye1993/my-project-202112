@@ -1,15 +1,9 @@
-// import { defineReactive } from './observer'
-// const a = {
-//   test: "我来测试侦听把"
-// }
-// defineReactive(a, 'test', a.test)
-// // console.log("哈哈。。。");
-// // console.log(a.test);
-// const d = a.test
-// // console.log(d);  
-
 import { defineReactive, observe } from "./observer";
-import { hasOwn, isValidArrayIndex } from "./utils";
+import { generate } from "./parser/codegen";
+import { parseHTML } from "./parser/html-parser";
+import { optimize } from "./parser/optimizer";
+import { parse } from "./parser/parser";
+import { createASTElement, extend, hasOwn, isValidArrayIndex } from "./utils";
 import Watcher from "./watcher";
 
 // a.test = '30'
@@ -160,3 +154,19 @@ setTimeout(() => {
   // vm.a.b++
   // vm.a.c.push(4)
 }, 1000)
+
+let html = `<div class="box" name="123">
+  <li v-if="message">
+    <i>1</i>
+    <i>2</i>
+    <i>3</i>
+  </li>
+  <li>123</li>
+  <li>123</li>
+</div>`
+const root = parse(html);
+console.log(root, "================code================")
+
+optimize(root, {});
+const code = generate(root)
+console.log(code, "================code================")
