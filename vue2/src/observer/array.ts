@@ -3,7 +3,7 @@
  * dynamically accessing methods on Array prototype
  */
 
-import { def } from './utils'
+import { def } from '../utils'
 
 const arrayProto = Array.prototype
 export const arrayMethods = Object.create(arrayProto)

@@ -1,7 +1,7 @@
 import { arrayMethods } from "./array";
 import Dep from "./dep";
-import { isObject } from "./utils";
-import { def, hasOwn, isPlainObject } from "./utils";
+import { isObject } from "../utils";
+import { def, hasOwn, isPlainObject } from "../utils";
 
 
 

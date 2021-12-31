@@ -18,7 +18,6 @@ export function generate(
 // 生成元素节点，递归生成
 export function genElement(el: any): string {
   let code
-  debugger
   const data = el.plain ? undefined : genData(el)
   const children = genChildren(el)
   code = `_c('${el.tag}'${data ? `,${data}` : '' // data

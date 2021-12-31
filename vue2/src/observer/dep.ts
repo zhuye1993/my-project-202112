@@ -1,7 +1,7 @@
 /* @flow */
 
 import type Watcher from './watcher'
-import { remove } from './utils';
+import { remove } from '../utils';
 
 let uid = 0
 export default class Dep {

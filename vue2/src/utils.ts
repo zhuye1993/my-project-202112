@@ -1,3 +1,5 @@
+import { popTarget, pushTarget } from "./observer/dep"
+
 export function def(obj: Object, key: string, val: any, enumerable?: boolean) {
   Object.defineProperty(obj, key, {
     value: val,
@@ -155,4 +157,46 @@ export function cached(fn: any): any {
     const hit = cache[str]
     return hit || (cache[str] = fn(str))
   })
+}
+
+export function callHook(vm: any, hook: string) {
+  // #7573 disable dep collection when invoking lifecycle hooks
+  pushTarget()
+  const handlers = vm.$options[hook]
+  const info = `${hook} hook`
+  if (handlers) {
+    for (let i = 0, j = handlers.length; i < j; i++) {
+      // invokeWithErrorHandling(handlers[i], vm, null, vm, info)
+    }
+  }
+  if (vm._hasHookEvent) {
+    vm.$emit('hook:' + hook)
+  }
+  popTarget()
+}
+
+export function isPrimitive(value: any): boolean {
+  return (
+    typeof value === 'string' ||
+    typeof value === 'number' ||
+    // $flow-disable-line
+    typeof value === 'symbol' ||
+    typeof value === 'boolean'
+  )
+}
+
+export function isDef(v: any): boolean {
+  return v !== undefined && v !== null
+}
+
+export function isUndef(v: any): boolean {
+  return v === undefined || v === null
+}
+
+export function isTextNode(node: any): boolean {
+  return isDef(node) && isDef(node.text) && isFalse(node.isComment)
+}
+
+export function isFalse(v: any): boolean {
+  return v === false
 }

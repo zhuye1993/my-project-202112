@@ -5,7 +5,7 @@ import {
   isObject,
   parsePath,
   traverse,
-} from './utils';
+} from '../utils';
 
 // import { traverse } from './traverse'
 // import { queueWatcher } from './scheduler'
@@ -89,7 +89,7 @@ export default class Watcher {
   get() {
     pushTarget(this)
     let value
-    const vm = this.vm
+    const vm = this;
     try {
       value = this.getter.call(vm, vm)
     } catch (e) {
